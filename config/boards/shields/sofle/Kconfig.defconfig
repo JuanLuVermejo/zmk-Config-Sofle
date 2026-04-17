@@ -19,7 +19,7 @@ config SSD1306
 config I2C
     default y
 
-config WS2812_STRIP
+config ZMK_RGB_UNDERGLOW
     default y
 
 endif
