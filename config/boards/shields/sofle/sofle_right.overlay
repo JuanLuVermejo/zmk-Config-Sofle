@@ -1,0 +1,72 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ *
+ * Sofle RGB - Right half overlay
+ */
+
+#include "sofle.dtsi"
+#include <dt-bindings/led/led.h>
+
+/ {
+    chosen {
+        zmk,underglow = &led_strip;
+        zephyr,display = &oled;
+    };
+};
+
+&default_transform {
+    col-offset = <6>;
+};
+
+&kscan0 {
+    col-gpios
+        = <&pro_micro 19 GPIO_ACTIVE_HIGH>   // F6 → A1  (cols reversed on right half)
+        , <&pro_micro 18 GPIO_ACTIVE_HIGH>   // F7 → A0
+        , <&pro_micro 15 GPIO_ACTIVE_HIGH>   // B1 → D15
+        , <&pro_micro 14 GPIO_ACTIVE_HIGH>   // B3 → D14
+        , <&pro_micro 16 GPIO_ACTIVE_HIGH>   // B2 → D16
+        , <&pro_micro 10 GPIO_ACTIVE_HIGH>   // B6 → D10
+        ;
+};
+
+&right_encoder {
+    status = "okay";
+};
+
+/*
+ * WS2812 RGB LED strip via SPI
+ * Same pin as left half: QMK D3 = pro_micro 1 = nice!nano P0.06
+ */
+&pinctrl {
+    spi1_default: spi1_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+        };
+    };
+    spi1_sleep: spi1_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi1 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        label = "WS2812";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+        chain-length = <37>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+        color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
+    };
+};
