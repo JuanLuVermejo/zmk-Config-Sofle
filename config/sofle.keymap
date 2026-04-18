@@ -21,8 +21,9 @@
         compatible = "zmk,combos";
         // Q + P simultaneous (one key each hand) → soft-off for transport
         combo_soft_off {
-            timeout-ms = <50>;
+            timeout-ms = <200>;
             key-positions = <13 22>;
+            require-prior-idle-ms = <200>;
             bindings = <&soft_off>;
             layers = <QWERTY>;
         };
