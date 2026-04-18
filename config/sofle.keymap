@@ -17,18 +17,6 @@
 #define RAISE  3
 
 / {
-    combos {
-        compatible = "zmk,combos";
-        // Q + P simultaneous (one key each hand) → soft-off for transport
-        combo_soft_off {
-            timeout-ms = <200>;
-            key-positions = <13 22>;
-            require-prior-idle-ms = <200>;
-            bindings = <&soft_off>;
-            layers = <QWERTY>;
-        };
-    };
-
     behaviors {
         // Custom sensor behaviors to drive RGB via encoder rotation
         rgb_sat_enc: rgb_sat_enc {
@@ -80,7 +68,7 @@
             //               | LGUI | LAlt | LCtl |      | Enter|    |SPACE  |      | RCtl | RAlt | RGUI |
             bindings = <
                 &none      &none   &none     &none      &none    &none                          &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &bt BT_CLR
-                &none      &none   &none     &none      &none    &none                          &none      &none      &none     &none     &none    &none
+                &none      &soft_off &none    &none      &none    &none                          &none      &none      &none     &none     &soft_off &none
                 &none      &none   &none     &none      &none    &none                          &none      &kp C_PREV &kp C_PP  &kp C_NEXT &none    &none
                 &none      &none   &none     &none      &none    &none       &kp C_MUTE &kp C_PP &none     &none      &none     &none     &none    &none
                                    &kp LGUI  &kp LALT   &kp LCTRL &trans     &kp RET    &kp SPACE &trans    &kp RCTRL  &kp RALT  &kp RGUI
